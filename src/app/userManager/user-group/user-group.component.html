@@ -1,0 +1,115 @@
+<div class="wrapper">
+    <!-- Header menu -->
+    <app-header></app-header>
+
+    <!-- sidebar menu -->
+    <app-sidebar></app-sidebar>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Breadcrumb start -->
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3>User Group Setup</h3>
+                </div>
+                <div class="col-sm-6 d-none d-sm-block">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/home">System Admin</a></li>
+                    <li class="breadcrumb-item active">User Group Setup</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section> 
+          <!-- Breadcrumb ends -->
+
+          <div class="container-fluid">
+              <div class="row">
+                  <div class="col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                          <h3 class="card-title">User Group Setup Form</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form role="form" [formGroup]="userGroupForm" (ngSubmit)="saveUserGroup()">
+                          <div class="card-body">
+                            <div class="form-group">
+                              <input type="text" class="form-control" formControlName="id" placeholder="ID" hidden>
+                              <label for="groupName">Group Name</label>
+                              <input type="text" class="form-control" formControlName="groupName" placeholder="Group Name" >
+                            </div>
+                            <div class="form-group">
+                              <label>Status</label>
+                              <select class="form-control" formControlName="status" id="status">
+                                  <option value="">--Please select--</option>
+                                  <option value="1">Active</option>
+                                  <option value="2">Inactive</option>
+                              </select>
+                          </div>
+                          </div>
+                          <!-- /.card-body -->
+                          <div class="card-footer">
+                            <button type="submit" class="btn btn-primary" [disabled]="!userGroupForm.valid">Save</button>
+                          </div>
+                        </form>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="card card-info">
+                      <div class="card-header">
+                        <h3 class="card-title">User group list</h3>
+                        <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered table-hover">
+                          <thead>
+                            <tr>
+                              <th>Group Name</th>
+                              <th>Status</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let userGroup of userGroupList; let i = index">
+                              <td>{{ userGroup.groupName }}</td>
+                              <td *ngIf="userGroup.status==1"> Active </td>
+                              <td *ngIf="userGroup.status==2"> Inctive </td>
+                              <td class="text-center align-middle">
+                                <div class="btn-group btn-group-sm">
+                                  <a class="btn btn-info" (click)="editByRow(userGroup)"><i class="fas fa-eye"></i></a>
+                                  <a class="btn btn-danger" [swal]="deleteSwal"><i class="fas fa-trash"></i></a>
+                                </div>
+                              </td>
+                              <swal
+                                #deleteSwal title="Delete?" text="This process cannot be undone" icon="question"
+                                [showCancelButton]="true" [focusCancel]="true" (confirm)="deleteByRow(userGroup.id)">
+                              </swal>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      
+                      <!-- /.card-body -->
+                    </div>
+                  </div>
+              </div>
+          </div>
+        <router-outlet></router-outlet>
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <app-footer></app-footer>
+</div>

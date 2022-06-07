@@ -1,0 +1,125 @@
+<div class="wrapper">
+
+    <!-- Header menu -->
+    <app-header></app-header>
+
+    <!-- sidebar menu -->
+    <app-sidebar></app-sidebar>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Breadcrumb start -->
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3>Sector Management</h3>
+                </div>
+                <div class="col-sm-6 d-none d-sm-block">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a routerLink="/home">DSP</a></li>
+                    <li class="breadcrumb-item active">Sector</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section> 
+          <!-- Breadcrumb ends -->
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="card">
+                        <div class="card-header text-white bg-secondary" >
+                          <h3 class="card-title">Add Sector</h3>
+                        </div>
+                        <div class="card-body">
+                            <form [formGroup] = "departmentForm" (ngSubmit)="save()">
+                                <div class="row">
+                                   <label>Sector Name: </label>
+                                   <input class="form-control" formControlName="departmentName" type="text" >
+                                    <input type="number" formControlName="id" hidden>
+                                </div>
+                                <div class="row mt-4">
+                                   <button class="btn btn-primary mr-4">Add</button>
+                                </div>
+                            </form>
+                            <hr>
+                            <form [formGroup] = "departmentUpload" (ngSubmit)="uploadFileData()">
+                              <div class="row">
+                                <!-- <div class="custom-file"> -->
+                                  <input type="file" formControlName="file" accept=".xlsx" class="form-control" (change)="onFileChange($event)">
+                                  <!-- <label class="custom-file-label" for="customFile">Choose file</label> -->
+                                <!-- </div> -->
+                              </div>
+                              <div class="row mt-2">
+                                <div *ngIf="selectedFile" class="alert alert-warning alert-dismissible">
+                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                  <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+                                  You've selected {{fileName}}. Please re-select the file if it is not the right file before submitting it.
+                                </div>
+                                </div>
+                              <div class="row mt-4">
+                                 <button class="btn btn-primary mr-4">Upload</button>
+                              </div>
+                            </form>
+                            <!-- <button class="btn btn-danger mr-4" (click)="reset()">Reset</button> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="card">
+                        <div class="card-header text-white bg-secondary" >
+                          <h3 class="card-title">Sector List</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-body table-responsive">
+                                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-hover table-bordered text-nowrap">
+                                  <thead>
+                                    <tr>
+                                      <th></th>
+                                      <th>Sl no</th>
+                                      <th>Sector</th>
+                                     
+                                    </tr>
+                                  </thead>
+                                  <tbody >
+                                    <tr *ngFor="let dlist of departmentList; let i =index; ">
+                                      <td>
+                                        <a class="btn btn-sm" (click)="editByRow(dlist)"><i class="far fa-edit mr-1"></i></a>
+                                      <a class="btn btn-sm test-danger" (click)="openModalDelete(dlist)"  ><i class="fas fa-trash-alt"></i></a>
+                                      </td>
+                                      <td>{{i+1}}</td>
+                                      <td>{{dlist.departmentName}}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <modal #myModalDelete>
+            <modal-header >
+                <h6 class="text-center"></h6>
+            </modal-header>
+              <modal-content>
+                <p>Are you sure to delete this Secotr?</p>
+              </modal-content>
+            <modal-footer>
+                <button class="btn btn-primary mr-3" (click)="onCloseHandled()">Cancel</button>
+                <button type="button" class="btn btn-danger" (click)="onDeleteStudent()">Yes</button>
+            </modal-footer>
+        </modal>
+        <router-outlet></router-outlet>
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <app-footer></app-footer>
+
+</div>

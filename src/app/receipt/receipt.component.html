@@ -1,0 +1,87 @@
+<div class="wrapper">
+    <!-- Header menu -->
+    <app-header></app-header>
+
+    <!-- sidebar menu -->
+    <app-sidebar></app-sidebar>
+    
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Breadcrumb start -->
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3>Receipt History</h3>
+                </div>
+                <div class="col-sm-6 d-none d-sm-block">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/home">Home</a></li>
+                    <li class="breadcrumb-item active">Receipt History</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section> 
+          <!-- Breadcrumb ends -->
+
+          <div class="container-fluid">
+              <div class="row">
+                  <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                          <h3 class="card-title">Receipt History</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <div class="card-body">
+                        <div class="row table-responsive">
+                          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>Sl.No</th>
+                                <th>System Report Number</th>
+                                <th>Receipt Date</th>
+                                <th>Debtor Type</th>
+                                <th>Received From</th>
+                                <th>Received Amount</th>
+                                <th>Receipt Number</th>
+                                <th>Received By</th>
+                                <th>Received Date</th>
+                                <th>Branch Name</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let r of receiptList; let i =index">
+                                <td>{{i+1}}</td>
+                                <td>{{r.reportNumber}}</td>
+                                <td>{{r.receiptDate | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{r.debtorType}}</td>
+                                <td>{{r.receivedfrom}}</td>
+                                <td>{{r.receivedAmt}}</td>
+                                <td>{{r.receiptNumber}}</td>
+                                <td>{{r.createdby}}</td>
+                                <td>{{r.createddate | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{r.group_name}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        <router-outlet></router-outlet>
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <app-footer></app-footer>
+</div>

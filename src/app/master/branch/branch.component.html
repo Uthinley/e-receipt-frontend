@@ -1,0 +1,113 @@
+<div class="wrapper">
+
+    <!-- Header menu -->
+    <app-header></app-header>
+
+    <!-- sidebar menu -->
+    <app-sidebar></app-sidebar>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Breadcrumb start -->
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3>Branch Management</h3>
+                </div>
+                <div class="col-sm-6 d-none d-sm-block">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a routerLink="/home">DSP</a></li>
+                    <li class="breadcrumb-item active">Branch</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section> 
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="card">
+                        <div class="card-header text-white bg-secondary" >
+                          <h3 class="card-title">Add Branch</h3>
+                        </div>
+                        <div class="card-body">
+                            <form [formGroup] = "BranchForm" (ngSubmit)="saveBranch()">
+                                <div class="row">
+                                    <label>Branch Name: </label>
+                                    <input class="form-control" formControlName="branchName" type="text" >
+                                    <input type="number" formControlName="id" hidden>
+                                 </div>
+                                 <div class="row">
+                                     <label>Sector Name:</label>
+                                     <select class="form-control" #departmentId formControlName="departmentId">
+                                      <option value="0">----Select----</option>
+                                      <option *ngFor="let sector of sectorlist" value="{{sector.id}}">{{sector.departmentName}}</option>
+                                  </select>
+                                 </div>
+                                 <div class="row mt-4">
+                                    <button class="btn btn-primary mr-4">Add</button>
+                                 </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                  <div class="card">
+                      <div class="card-header text-white bg-secondary" >
+                        <h3 class="card-title">Branch List</h3>
+                      </div>
+                      <div class="card-body">
+                          <div class="card-body table-responsive p-0">
+                              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-hover table-bordered text-nowrap">
+                                <thead>
+                                  <tr>
+                                    <th></th>
+                                    <th>Sl no</th>
+                                    <th>Sector Name</th>
+                                    <th>Branch Name</th>
+                                  </tr>
+                                </thead>
+                                <tbody >
+                                  <tr *ngFor="let blist of branchList; let i =index; ">
+                                    <td>
+                                      <a class="btn btn-sm" (click)="editByRow(blist)"><i class="far fa-edit mr-1"></i></a>
+                                    <a class="btn btn-sm test-danger" (click)="openModalDelete(blist)"  ><i class="fas fa-trash-alt"></i></a>
+                                    </td>
+                                    <td>{{i+1}}</td>
+                                    <td>{{blist.department.departmentName}}</td>
+                                    <td>{{blist.branchName}}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <modal #myModalDelete>
+            <modal-header >
+                <h6 class="text-center"></h6>
+            </modal-header>
+              <modal-content>
+                <p>Are you sure to delete the Branch?</p>
+              </modal-content>
+            <modal-footer>
+                <button class="btn btn-primary mr-3" (click)="onCloseHandled()">Cancel</button>
+                <button type="button" class="btn btn-danger" (click)="onDeleteBranch()">Yes</button>
+            </modal-footer>
+        </modal>
+          <router-outlet></router-outlet>
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <app-footer></app-footer>
+
+</div>

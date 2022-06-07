@@ -1,0 +1,141 @@
+<div class="wrapper">
+
+    <!-- Header menu -->
+    <app-header></app-header>
+
+    <!-- sidebar menu -->
+    <app-sidebar></app-sidebar>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Breadcrumb start -->
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3>Course Master Management</h3>
+                </div>
+                <div class="col-sm-6 d-none d-sm-block">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a routerLink="/home">DSP</a></li>
+                    <li class="breadcrumb-item active">Course Master</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section> 
+          <!-- Breadcrumb ends -->
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header text-white bg-secondary" >
+                          <h3 class="card-title">Add Courses</h3>
+                        </div>
+                        <div class="card-body">
+                            <form [formGroup] = "courseForm" (ngSubmit)="saveCourse()">
+                                <div class="row">
+                                   <label>Course Name: </label>
+                                   <input class="form-control" formControlName="courseName" type="text" >
+                                    <input type="number" formControlName="id" hidden>
+                                </div>
+                                <div class="row">
+                                    <label>Course ID: </label>
+                                    <input class="form-control" formControlName="courseId" type="text" >
+                                 </div>
+                                 <div class="row">
+                                    <label>Course Level:</label>
+                                    <select class="form-control" formControlName="clevel" >
+                                     <option value="0">----Select----</option>
+                                     <option *ngFor="let clevel of courseLevel" value="{{clevel.id}}">{{clevel.courseLvlName}}</option>
+                                 </select>
+                                </div>
+                                 <div class="row">
+                                    <label>Sector Name:</label>
+                                    <!-- <select class="form-control" #myselect formControlName="sectorId" (change)="getSelectedBranch(myselect.value)"> -->
+                                    <select class="form-control" #myselect formControlName="sectorId" >
+                                     <option value="0">----Select----</option>
+                                     <option *ngFor="let sector of sectorlist" value="{{sector.id}}">{{sector.departmentName}}</option>
+                                 </select>
+                                </div>
+                                <!-- <div class="row">
+                                    <label>Branch</label>
+                                    <select class="form-control" #branchSelect formControlName="branchId">
+                                      <option>----Select Branch----</option>
+                                      <option *ngFor="let branch of branchList" value="{{branch.id}}">{{branch.branchName}}</option>
+                                    </select>
+                                  </div> -->
+                                <div class="row mt-4">
+                                   <button class="btn btn-primary mr-4">Add</button>
+                                </div>
+                            </form>
+                            <hr>
+                           
+                            <!-- <button class="btn btn-danger mr-4" (click)="reset()">Reset</button> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header text-white bg-secondary" >
+                          <h3 class="card-title">Course List</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-body table-responsive p-0">
+                                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-hover table-bordered text-nowrap">
+                                  <thead>
+                                    <tr>
+                                      <th></th>
+                                      <th>Sl no</th>
+                                      <th>Course Name</th>
+                                      <th>Course ID</th>
+                                      <th>Course Level</th>
+                                      <th>Sector</th>
+                                      <!-- <th>Branch</th> -->
+                                    </tr>
+                                  </thead>
+                                  <tbody >
+                                    <tr *ngFor="let clist of courseList; let i =index; ">
+                                      <td>
+                                        <a class="btn btn-sm" (click)="editByRow(clist)"><i class="far fa-edit mr-1"></i></a>
+                                      <a class="btn btn-sm test-danger" (click)="openModalDelete(clist)"  ><i class="fas fa-trash-alt"></i></a>
+                                      </td>
+                                      <td>{{i+1}}</td>
+                                      <td>{{clist.courseName}}</td>
+                                      <td>{{clist.courseId}}</td>
+                                      <td>{{clist.courseLevelMaster.courseLvlName}}</td>
+                                      <td>{{clist.department.departmentName}}</td>
+                                      <!-- <td>{{clist.branch.branchName}}</td> -->
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <modal #myModalDelete>
+            <modal-header >
+                <h6 class="text-center"></h6>
+            </modal-header>
+              <modal-content>
+                <p>Are you sure to delete this course?</p>
+              </modal-content>
+            <modal-footer>
+                <button class="btn btn-primary mr-3" (click)="onCloseHandled()">Cancel</button>
+                <button type="button" class="btn btn-danger" (click)="onDeleteCourse()">Yes</button>
+            </modal-footer>
+        </modal>
+        <router-outlet></router-outlet>
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <app-footer></app-footer>
+
+</div>

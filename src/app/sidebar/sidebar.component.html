@@ -1,0 +1,83 @@
+<!-- Main Sidebar Container -->
+<!-- #ED5D01 -->
+<aside class="main-sidebar elevation-4 layout-fixed" style="background-color: #053A56;">
+    <!-- <aside class="main-sidebar sidebar-white-primary elevation-4 sidebar-light-primary"> -->
+        <!-- Brand Logo -->
+        <a routerLink="/home" class="brand-link">
+            <!-- <img src="assets/img/dsp.png" alt="ORS Logo" class="brand-image img-circle elevation-2"
+               style="opacity: .8"> -->
+            <span class="text-white font-weight-light">CRST</span>
+        </a>
+        <hr>
+    
+        <!-- Sidebar -->
+        <div class="sidebar">
+    
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item has-treeview" *ngIf="isAdmin">
+                        <a class="nav-link text-white">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                System Admin
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview" id="user">
+                             <li class="nav-item">
+                                <a class="nav-link text-white" routerLink="/user-group">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>User Group</p>
+                                </a>
+                            </li>
+    
+                            <li class="nav-item">
+                                <a class="nav-link text-white" routerLink="/user-setup">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>User Setup</p>
+                                </a>
+                            </li>
+    
+                            <!-- <li class="nav-item text-white">
+                                <a class="nav-link text-white" routerLink="/access-permission">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Access Permission </p>
+                                </a>
+                            </li> -->
+    
+                            <!-- <li class="nav-item text-white">
+                                <a class="nav-link text-white" routerLink="/password-policy">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Password Policy </p>
+                                </a>
+                            </li> -->
+                        </ul>
+                    </li>
+
+                    <li class="nav-item" >
+                        <a class="nav-link text-white" routerLink="/change-password">
+                            <i class="far fa-user nav-icon"></i>
+                            <p>Change Password</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item" >
+                        <a class="nav-link text-white" routerLink="/receipt-history">
+                            <i class="far fa-user nav-icon"></i>
+                            <p>Receipt History</p>
+                        </a>
+                    </li>
+                    <li class="nav-item" >
+                        <a class="nav-link text-white" routerLink="/home">
+                            <i class="far fa-user nav-icon"></i>
+                            <p>Receipt Form</p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+    </aside>
+    

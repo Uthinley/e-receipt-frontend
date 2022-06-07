@@ -1,0 +1,9 @@
+@media print {
+    @page {
+	  size: landscape;
+      }
+
+}
+.formats {
+    font-size: 10px;
+}

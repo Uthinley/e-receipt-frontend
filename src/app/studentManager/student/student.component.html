@@ -1,0 +1,387 @@
+<div class="wrapper">
+
+  <!-- Header menu -->
+  <app-header></app-header>
+
+  <!-- sidebar menu -->
+  <app-sidebar></app-sidebar>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Breadcrumb start -->
+      <section class="content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6">
+                <h3>Student Manager</h3>
+              </div>
+              <div class="col-sm-6 d-none d-sm-block">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a routerLink="/home">DSP</a></li>
+                  <li class="breadcrumb-item active">Student</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section> 
+        <!-- Breadcrumb ends -->
+        <div class="container-fluid">
+           <!-- ./row -->
+        <div class="row">
+          <div class="col-12 col-sm-12">
+            <div class="card card-primary card-tabs">
+              <div class="card-header p-0 pt-1">
+                <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Home</a>
+                  </li>
+                  <li class="nav-item" *ngIf="isAdmin">
+                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Add Student</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content" id="custom-tabs-one-tabContent">
+                  <!-- ./tab home start-->
+                  <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                    <div class="row">
+                      <div class="col-md-5">
+                        <form [formGroup]="searchForm" (ngSubmit)="searchStudentByCourseId()">
+                              <!-- <input type="number" formControlName="courseId" [ngClass]="{ 'is-invalid': submitted && getter.courseId.errors }"  class="form-control form-control-lg" placeholder="search student by course ID/course name" required> -->
+                               <!--Using ng-option and for loop-->
+                               <label>Search Student by Course Id</label>
+                            
+                            <div class="d-flex flex-row">
+                              <div class="col-md-6 p-2">
+                                <ng-select [(ngModel)]="selected" formControlName="courseId" [ngClass]="{ 'is-invalid': submitted && getter.courseId.errors }">
+                                  <ng-option *ngFor="let clist of courseList" [value]="clist.id">{{clist.courseMaster.courseId}}</ng-option>
+                                </ng-select>
+                              </div>
+                              <div class="col-md-6 p-2">
+                                <button type="submit" class="btn btn-md btn-primary">
+                                <i class="fa fa-search"></i>
+                               </button>
+                              </div>
+                            </div>
+                            <div *ngIf="submitted && getter.courseId.errors" class="invalid-feedback">
+                              <div *ngIf="getter.courseId.errors.required">This field is required</div>
+                          </div>
+                      </form>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-7">
+                        <div class="card card-primary card-outline">
+                          <div class="card-header">
+                            <h3 class="card-title">Student Detail</h3>
+                            <div class="card-tools">
+                              <!-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="widgets.html" data-source-selector="#card-refresh-content" data-load-on-init="false">
+                                <i class="fas fa-sync-alt"></i>
+                              </button> -->
+                              <button type="button" class="btn btn-tool text-primary" data-card-widget="maximize">
+                                <i class="fas fa-expand"></i>
+                              </button>
+                              <button type="button" class="btn btn-tool text-primary" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                              </button>
+                              <button type="button" class="btn btn-tool text-primary" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                              </button>
+                            </div>
+                            <!-- /.card-tools -->
+                          </div>
+                          <!-- /.card-header -->
+                          <div class="card-body">
+                            <div class="card-body table-responsive p-0">
+                              <table class="table table-hover text-nowrap">
+                                <thead>
+                                  <tr>
+                                    <th></th>
+                                    <th>sl</th>
+                                    <th>Avatar</th>
+                                    <th>Full name</th>
+                                    <th>CID</th>
+                                    <th>DID</th>
+                                    <th>DOB</th>
+                                    <th>Gender</th>
+                                    <th>Mobile number</th>
+                                    <th>Email address</th>
+                                    <th>Blood group</th>
+                                    <th>Marital status</th>
+                                    <th>Training year</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let cslist of courseListByid; let i =index;">
+                                    <td>
+                                      <div *ngIf="!cslist.isEdit && isAdmin">
+                                        <a class="btn btn-sm" (click)="getStudentById(cslist)" ><i class="far fa-edit mr-1"></i></a>
+                                        <a class="btn btn-sm " (click)="openModalDelete(cslist)"><i class="fas fa-trash-alt"></i></a>
+                                      </div>
+                                      <div *ngIf="cslist.isEdit">
+                                        <a class="btn btn-sm" (click)="updateStudentById(cslist)" ><i class="fas fa-check"></i></a>
+                                        <a class="btn btn-sm " (click)="closeEdit(cslist)"><i class="fas fa-times"></i></a>
+                                      </div>
+                                      </td>
+                                    <td>{{i+1}}</td>
+                                    <td>
+                                      <span *ngIf="!cslist.avatar; else elseBlock">
+                                        <img class="profile-user-img img-fluid img-circle" src="https://cdn0.iconfinder.com/data/icons/male-national-character-2/128/bhutan-bhutanese-national-costume-man-512.png" alt="N/A">
+                                    </span>
+                                    <ng-template #elseBlock> <img class="profile-user-img img-fluid img-circle" src="{{cslist.avatar}}" alt="profile picture not found"></ng-template>
+                                    <!-- <img class="profile-user-img img-fluid img-circle" src="{{cslist.avatar}}" alt="N/A"></td> -->
+                                    <td>
+                                      <div *ngIf="!cslist.isEdit">
+                                        {{cslist.name}}
+                                      </div>
+                                      <div *ngIf="cslist.isEdit">
+                                          <input type="text" class="form-control" [(ngModel)]="cslist.name"/>
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <div *ngIf="!cslist.isEdit">
+                                        {{cslist.cid}}
+                                      </div>
+                                      <div *ngIf="cslist.isEdit">
+                                        <input type="number" class="form-control" [(ngModel)]="cslist.cid"/>
+                                    </div>
+                                    </td>
+                                    <td>
+                                      <div *ngIf="!cslist.isEdit">
+                                        {{cslist.dessungId}}
+                                      </div>
+                                      <div *ngIf="cslist.isEdit">
+                                        <input type="text" class="form-control" [(ngModel)]="cslist.dessungId"/>
+                                    </div>
+                                    </td>
+                                    <td>
+                                      <div *ngIf="!cslist.isEdit">
+                                        {{cslist.dob}}
+                                      </div>
+                                      <div *ngIf="cslist.isEdit">
+                                        <input type="text" class="form-control" [(ngModel)]="cslist.dob"/>
+                                    </div>
+                                    </td>
+                                    <td>
+                                      <div *ngIf="!cslist.isEdit">
+                                       {{cslist.sex}}
+                                      </div>
+                                      <div *ngIf="cslist.isEdit">
+                                        <input type="text" class="form-control" [(ngModel)]="cslist.sex"/>
+                                    </div>
+                                    </td>
+                                    <td>
+                                      <div *ngIf="!cslist.isEdit">
+                                        {{cslist.mobileNo}}
+                                       </div>
+                                       <div *ngIf="cslist.isEdit">
+                                         <input type="text" class="form-control" [(ngModel)]="cslist.mobileNo"/>
+                                     </div>
+                                    </td>
+                                    <td>
+                                      <div *ngIf="!cslist.isEdit">
+                                        {{cslist.email}}
+                                       </div>
+                                       <div *ngIf="cslist.isEdit">
+                                         <input type="text" class="form-control" [(ngModel)]="cslist.email"/>
+                                     </div>
+                                    </td>
+                                    <td>
+                                      <div *ngIf="!cslist.isEdit">
+                                        {{cslist.bloodGroup}}
+                                       </div>
+                                       <div *ngIf="cslist.isEdit">
+                                         <input type="text" class="form-control" [(ngModel)]="cslist.bloodGroup"/>
+                                     </div>
+                                    </td>
+                                    <td>
+                                      <div *ngIf="!cslist.isEdit">
+                                        {{cslist.maritalStatus}}
+                                       </div>
+                                       <div *ngIf="cslist.isEdit">
+                                         <input type="text" class="form-control" [(ngModel)]="cslist.maritalStatus"/>
+                                     </div>
+                                    </td>
+                                    <td>
+                                      <div *ngIf="!cslist.isEdit">
+                                        {{cslist.trainingYear}}
+                                       </div>
+                                       <div *ngIf="cslist.isEdit">
+                                         <input type="text" class="form-control" [(ngModel)]="cslist.trainingYear"/>
+                                     </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                                <!-- <tfoot *ngIf="courseListByid ===''">
+                                  <h6>No student found</h6>
+                                </tfoot> -->
+                              </table>
+                            </div>
+                          </div>
+                          <!-- /.card-body -->
+                        </div>
+                        </div>
+                        <div class="col-md-5">
+                          <div class="row" *ngFor="let course of courseListByid; let k= index;">
+                            <div class="col-md-12" *ngIf="k == 0">
+                              <div class="card card-widget widget-user" *ngFor="let c of course.courses" >
+                                <!-- Add the bg color to the header using any of the bg-* classes -->
+                                <div class="widget-user-header bg-info" *ngIf="c.id == selected">
+                                  <h5 class="widget-user-username">Course Detail</h5>
+                                  <h6 class="widget-user-desc" >{{c.courseMaster.courseId}} ({{c.courseMaster.courseName}})</h6>
+                                  <h6 class="widget-user-desc">Trainer ({{c.trainers.trainerName}})</h6>
+                                  <!-- <h6 class="widget-user-desc">Programme ({{c.trainers.trainingProgramme.trainingProgramme}})</h6> -->
+                                </div>
+                                <div class="widget-user-image">
+                                  <!-- <img class="img-circle elevation-2" src="https://cdn0.iconfinder.com/data/icons/male-national-character-2/128/bhutan-bhutanese-national-costume-man-512.png" alt="User Avatar"> -->
+                                </div>
+                                <div class="card-footer" *ngIf="c.id == selected">
+                                  <div class="row">
+                                    <div class="col-sm-4 border-right">
+                                      <div class="description-block">
+                                        <h5 class="description-header">{{c.startDate}}</h5>
+                                        <span class="description-text">Start Date </span>
+                                      </div>
+                                      <!-- /.description-block -->
+                                    </div>
+                                    <!-- /.col -->
+                                    <div class="col-sm-4 border-right">
+                                      <div class="description-block">
+                                        <h5 class="description-header">{{c.endDate}}</h5>
+                                        <span class="description-text">End Date</span>
+                                      </div>
+                                      <!-- /.description-block -->
+                                    </div>
+                                    <!-- /.col -->
+                                    <div class="col-sm-4">
+                                      <div class="description-block">
+                                        <h5 class="description-header">{{c.dspCentre.dspCentre}}</h5>
+                                        <span class="description-text">Location</span>
+                                      </div>
+                                      <!-- /.description-block -->
+                                    </div>
+                                    <!-- /.col -->
+                                  </div>
+                                  <!-- /.row -->
+                                </div>
+                              </div>
+                            </div>
+                          </div>     
+                        </div>
+                      </div>
+                  </div>
+                  <!-- /tab home end -->
+
+                  <!-- ./tab student start-->
+                  <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                  <form [formGroup]="addStudentForm">
+                    <div class="row">
+                      <div class="col-md-12">   
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label>Select Course ID</label>   
+                          <ng-select [(ngModel)]="selectedCourse"  formControlName="courseSelected" >
+                            <ng-option *ngFor="let clist of courseList" [value]="clist.id">{{clist.courseMaster.courseId}}</ng-option>
+                          </ng-select>
+                          </div>
+                        </div>                     
+                          <div class="row mt-4">
+                            <table class="table table-sm">
+                              <thead>
+                                <tr>
+                                  <th scope="col">#</th>
+                                  <th scope="col">CID</th>
+                                  <th scope="col">Name</th>
+                                  <th scope="col">Gender</th>
+                                  <th scope="col">Dessung ID</th>
+                                  <th scope="col">Mobile no</th>
+                                  <th scope="col">
+                                    <span>
+                                        <i class="fa fa-plus-circle" (click)="onAddRow()"  aria-hidden="true"></i>
+                                    </span>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody formArrayName="studentList">
+                                  <tr *ngFor="let row of addStudentForm.get('studentList')['controls'];let i = index;" [formGroupName]="i">
+                                    <td>{{i+1}}</td>
+                                    <td>
+                                      <input type="number" class="form-control" formControlName="cid" [(ngModel)]="row.cid" (change)="onKeyDessungDetail($event,row,i)" >
+                                      <!-- <div *ngIf="studentSubmitted && studentGetter.cid.errors" class="invalid-feedback">
+                                        <div *ngIf="ciderror">length</div> -->
+                                        <!-- <div *ngIf="studentGetter.cid.errors.minLength">Password must be 11 characters</div> -->
+                                    <!-- </div> -->
+                                    </td>
+                                    <td>
+                                      <!-- [(ngModel)]="row.name" [(ngModel)]="name" value="{{row.name}}" -->
+                                      <input type="text" class="form-control" formControlName="name" [(ngModel)]="row.name" value="{{row.name}}" readonly>
+                                    </td>
+                                    <td>
+                                      <input type="text" class="form-control" formControlName="gender" [(ngModel)]="row.gender" value="{{row.gender}}"  readonly>
+                                    </td>
+                                    <td>
+                                      <input type="text" class="form-control" formControlName="did" [(ngModel)]="row.did" value="{{row.did}}" readonly>
+                                    </td>
+                                    <td>
+                                      <input type="text" class="form-control" formControlName="mobileNo" [(ngModel)]="row.mobileNo"  value="{{row.mobileNo}}"  readonly>
+                                    </td>
+                                    <td>
+                                      <!-- <button (click)="onRemoveRow(i)">Remove</button> -->
+                                      <i  (click)="onRemoveRow(i)" class="fa fa-trash"></i>
+                                    </td>
+                                    <td>
+                                      <input type="text" class="form-control" formControlName="avatar" [(ngModel)]="row.avatar"  value="{{row.avatar}}"  hidden>
+                                      <input type="text" class="form-control" formControlName="batchNo" [(ngModel)]="row.batchNo"  value="{{row.batchNo}}"  hidden>
+                                      <input type="text" class="form-control" formControlName="bloodGroup" [(ngModel)]="row.bloodGroup"  value="{{row.bloodGroup}}"  hidden>
+                                      <input type="text" class="form-control" formControlName="dob" [(ngModel)]="row.dob"  value="{{row.dob}}"  hidden>
+                                      <input type="text" class="form-control" formControlName="email" [(ngModel)]="row.email"  value="{{row.email}}"  hidden>
+                                      <input type="text" class="form-control" formControlName="maritalStatus" [(ngModel)]="row.maritalStatus"  value="{{row.maritalStatus}}"  hidden>
+                                      <input type="text" class="form-control" formControlName="trainingCentreId" [(ngModel)]="row.trainingCentreId"  value="{{row.trainingCentreId}}"  hidden>
+                                      <input type="text" class="form-control" formControlName="trainingYear" [(ngModel)]="row.trainingYear"  value="{{row.trainingYear}}"  hidden>
+
+                                    </td>
+                                  </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                       </div>
+                    </div>
+                    <div class="row">
+                      <button class="btn btn-primary" (click)="saveStudent()">Save</button>
+                    </div>
+                   </form>
+                  </div>
+                  <!-- /tab student end -->
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+          </div>      
+        </div>
+
+        <modal #myModalDelete>
+          <modal-header >
+              <h6 class="text-center"></h6>
+          </modal-header>
+            <modal-content>
+              <p>Are you sure to delete this student?</p>
+            </modal-content>
+          <modal-footer>
+              <button class="btn btn-primary mr-3" (click)="onCloseHandled()">Cancel</button>
+              <button type="button" class="btn btn-danger" (click)="onDeleteStudent()">Yes</button>
+          </modal-footer>
+      </modal>
+      <router-outlet></router-outlet>
+  </div>
+  <!-- /.content-wrapper -->
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+
+  <!-- Main Footer -->
+  <app-footer></app-footer>
+
+</div>

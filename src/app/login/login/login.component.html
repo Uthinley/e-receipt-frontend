@@ -1,0 +1,80 @@
+<div class="login-page">
+  <div class="login-box">
+    <div class="login-logo">
+      <a href="/"><b>CRST </b>e-Receipt</a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="card">
+      <div class="card-body login-card-body">
+        <p class="login-box-msg">Sign in</p>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="input-group mb-3">
+            <input type="text" id="user_name" class="form-control" name="user_name" [formControlName]="'username'"
+              required autofocus placeholder="User name">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <span *ngIf="!loginForm.get('username').valid && loginForm.get('username').touched">
+              Please provide a valid user name.
+            </span>
+          </div>
+          <div class="input-group mb-3">
+            <input [type]="fieldTextType ? 'text' : 'password'" id="password" class="form-control" name="password"
+              [formControlName]="'password'" placeholder="Password" required>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <i class="fa" [ngClass]="{
+                        'fa-eye-slash': !fieldTextType,
+                        'fa-eye': fieldTextType
+                      }" (click)="toggleFieldTextType()"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group mb-3">
+          <span *ngIf="!loginForm.get('password').valid && loginForm.get('password').touched">
+              Password cannot be empty.
+            </span>
+          </div>
+
+          <div class="input-group mb-3">
+            <div *ngIf='this.isError'>
+              <p class="login-failed-text text-danger">Incorrect credentials. Please try again.</p>
+            </div>
+          </div>
+          <div class="row">
+            <!-- <div class="col-8">
+              <div class="icheck-primary">
+                <input type="checkbox" id="remember">
+                <label for="remember">
+                  Remember Me
+                </label>
+              </div>
+            </div> -->
+            <!-- /.col -->
+            <div class="col-4">
+              <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            </div>
+            <!-- /.col -->
+          </div>
+        </form>
+
+        <!-- <p class="mb-1">
+              <a href="forgot-password.html">I forgot my password</a>
+            </p> -->
+        <p class="mb-0">
+          <!-- <a routerLink="/signup" class="text-center">Register a new membership</a> -->
+        </p>
+        <p class="mt-3 mb-1">
+          <!-- <a routerLink="/forgot-password">Forgot password</a> -->
+        </p>
+      </div>
+      <!-- /.login-card-body -->
+    </div>
+  </div>
+</div>

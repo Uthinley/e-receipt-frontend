@@ -1,0 +1,162 @@
+<div class="wrapper">
+    <!-- Header menu -->
+    <app-header></app-header>
+
+    <!-- sidebar menu -->
+    <app-sidebar></app-sidebar>
+    
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Breadcrumb start -->
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3>User Setup</h3>
+                </div>
+                <div class="col-sm-6 d-none d-sm-block">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/home">System Admin</a></li>
+                    <li class="breadcrumb-item active">User Setup</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section> 
+          <!-- Breadcrumb ends -->
+
+          <div class="container-fluid">
+              <div class="row">
+                  <div class="col-md-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                          <h3 class="card-title">User Setup Form</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form role="form" [formGroup]="userSetupForm" (ngSubmit)="saveUser()">
+                          <div class="card-body">
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="username">Username</label>
+                                    <input type="text" class="form-control" formControlName="id" id="id" placeholder="ID" hidden>
+                                    <input type="text" class="form-control" formControlName="username" id="username" placeholder="Username">
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <!-- <div class="form-group">
+                                        <label for="username">Email</label>
+                                        <input type="email" class="form-control" formControlName="email" id="email" placeholder="Valid email address">
+                                    </div> -->
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="username">Password</label>
+                                    <input type="password" class="form-control" formControlName="password" 
+                                    id="password1" placeholder="">
+                                </div>
+                                
+                                <div class="form-group col-md-6">
+                                    <label for="password">Re-enter to confirm</label>
+                                    <input type="password" class="form-control" formControlName="password" id="password2" placeholder="">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>User Type</label>
+                                    <select class="form-control" formControlName="userType" id="userType">
+                                        <option value="">--Please select--</option>
+                                        <option *ngFor="let group of userGroupList" value="{{group.id}}">{{ group.groupName }}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Status</label>
+                                    <select class="form-control" formControlName="status" id="status">
+                                        <option value="">--Please select--</option>
+                                        <option value="1">Active</option>
+                                        <option value="2">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                          </div>
+                          <!-- /.card-body -->
+                          <div class="card-footer">
+                            <button type="submit" class="btn btn-primary" [disabled]="!userSetupForm.valid">Submit</button>
+                          </div>
+                        </form>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-info">
+                      <div class="card-header">
+                        <h3 class="card-title">User list</h3>
+          
+                        <div class="card-tools">
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered table-hover">
+                          <thead>
+                            <tr>
+                              <th>ID</th>
+                              <th>Name</th>
+                              <!-- <th>Email</th> -->
+                              <!-- <th>Phone number</th> -->
+                              <!-- <th>CID</th> -->
+                              <th>Status</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let user of userList; let i = index">
+                              <td>{{ user.id }}</td>
+                              <td>{{ user.username }}</td>
+                              <!-- <td>{{ user.email }}</td> -->
+                              <!-- <td>{{ user.phoneNumber }}</td> -->
+                              <!-- <td>{{ user.cid }}</td> -->
+                              <td *ngIf="user.status==1"> Active </td>
+                              <td *ngIf="user.status==2"> Inctive </td>
+                              <td *ngIf="user.status==null"> N/A </td>
+                              <td>
+                                <div class="btn-group btn-group-sm">
+                                  <a class="btn btn-info" (click)="editByRow(user)"><i class="fas fa-eye"></i></a>
+                                  <a class="btn btn-danger" [swal]="deleteSwal"><i class="fas fa-trash"></i></a>
+                                </div>
+                              </td>
+                              <swal
+                                #deleteSwal title="Delete?" text="This process cannot be undone" icon="question"
+                                [showCancelButton]="true" [focusCancel]="true" (confirm)="deleteByRow(user.id)">
+                              </swal>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+                  </div>
+              </div>
+          </div>
+        <router-outlet></router-outlet>
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <app-footer></app-footer>
+</div>

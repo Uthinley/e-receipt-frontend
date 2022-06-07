@@ -1,0 +1,393 @@
+<div class="wrapper layout-fixed layout-navbar-fixed">
+
+    <!-- Header menu -->
+    <app-header></app-header>
+
+    <!-- sidebar menu -->
+    <app-sidebar></app-sidebar>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Breadcrumb start -->
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3>Home</h3>
+                </div>
+                <div class="col-sm-6 d-none d-sm-block">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a routerLink="/home">CRST</a></li>
+                    <li class="breadcrumb-item active">Home</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section> 
+
+          <!-- Admin dasboard start -->
+          
+          <!-- Admin dashboard end -->
+
+          <!-- Breadcrumb ends -->
+        
+
+          <!-- receipt form -->
+          <section class="content" >
+            <div class="container-fluid">
+              <div class="row" *ngIf="viewForm">
+                <div class="col-md-12">
+                  <form [formGroup]="receiptForm" (ngSubmit)="add()">
+                    <div class="card">
+                      <div class="card-header bg-primary">
+                        Receipt form
+                      </div>
+                      <div class="card-body">
+
+                        <div class="row">
+                          <div class="col-sm-6">
+                              <div class="form-group">
+                                  <label for="trainerId">System Report Number</label>
+                                  <input type="text" class="form-control" id="reportNumber" formControlName="reportNumber" [(ngModel)]="reportNumber" required placeholder="Enter system report no"  [ngClass]="{ 'is-invalid': submitted && getter.reportNumber.errors }">
+                                </div>
+                                <!-- <div *ngIf="submitted && getter.reportNumber.errors" class="invalid-feedback">
+                                  <div *ngIf="getter.reportNumber.errors.required">Please enter Trainer ID </div>
+                                </div> -->
+                          </div>
+                          <div class="col-sm-6">
+                          <div class="form-group">
+                              <label for="fullname">Receipt Date</label>
+                              <input type="date" class="form-control" id="receiptDate" formControlName="receiptDate" [(ngModel)]="receiptDate" [ngClass]="{ 'is-invalid': submitted && getter.receiptDate.errors }">
+                            </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label>Debtor Type</label>
+                            <select #myselect (ngModelChange)="onOptionSelected(myselect.value)" class="form-control" formControlName="debtorType" [(ngModel)]="debtorType" [ngClass]="{ 'is-invalid': submitted && getter.debtorType.errors }">
+                              <option value="Individual">Individual</option>
+                              <option value="Institution">Institution </option>
+                            </select>
+                          </div>
+                              <!-- <div *ngIf="submitted && getter.trainerId.errors" class="invalid-feedback">
+                                <div *ngIf="getter.trainerId.errors.required">Please enter Trainer ID </div>
+                              </div> -->
+                        </div>
+                          <div class="col-sm-6">
+                          <div class="form-group">
+                              <label for="fullname">Received Amount</label>
+                              <input type="number" class="form-control"  id="receivedAmt" formControlName="receivedAmt" [(ngModel)]="receivedAmt"  [ngClass]="{ 'is-invalid': submitted && getter.receivedAmt.errors }" readonly>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <!-- <label>On account of</label>
+                              <input type="text" class="form-control" id="accountOf"  formControlName="accountOf" [ngClass]="{ 'is-invalid': submitted && getter.accountOf.errors }"> -->
+                              <label>From</label>
+                              <input type="text" class="form-control" id="from" [(ngModel)]="from" formControlName="from" [ngClass]="{ 'is-invalid': submitted && getter.from.errors }">
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            
+                          </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Add +</button>
+                      </div>
+                      <div class="card-footer text-muted">
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="row" *ngIf="viewForm">
+                <div class="col-md-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <form [formGroup]="consolidatedForm" (ngSubmit)="save()">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <!-- <th scope="col">#</th> -->
+                        <th scope="col">System report number</th>
+                        <th scope="col">Receipt Date</th>
+                        <th scope="col">Received from</th>
+                        <th scope="col">Debtor type</th>
+                        <th scope="col">Received amount</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+                        <tbody formArrayName="receiptList">
+                          <tr *ngFor="let row of consolidatedForm.get('receiptList')['controls'];let i = index;" [formGroupName]="i">
+                            <td>
+                              <input type="text" value="row.reportNumber" formControlName="reportNumber" class="form-control" readonly>
+                            </td>
+                            <td>
+                              <input type="text" value="row.receiptDate" formControlName="receiptDate" class="form-control" readonly>
+                            </td>
+                            <td>
+                              <input type="text" value="row.from" formControlName="from" class="form-control" readonly>
+                            </td>
+                            <td>
+                              <input type="text" value="row.debtorType" formControlName="debtorType" class="form-control" readonly>
+                            </td>
+                            <td>
+                              <input type="text" value="row.receivedAmt" formControlName="receivedAmt" class="form-control" readonly>
+                            </td>
+                            <td>
+                              <i  (click)="onRemoveRow(i)" class="fa fa-trash"></i>
+                            </td>
+                          </tr>
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-primary">Save and Generate Report</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row certificate landscape" *ngIf="viewReceipt">
+                <div class="col-12">
+                  <div class="invoice"  >
+                    <div class="border">
+                      <!-- this row will not appear when printing -->
+                      <div class="row no-print">
+                       <button class="btn btn-secondary" (click)="back()">BACK</button>
+                        <div class="col-12">
+                          <a target="_blank" class="btn btn-default" onclick="window.print();return false;"><i class="fas fa-print"></i> Print</a>
+                        </div>
+                      </div>
+        
+                      <!-- Receipt HEADER -->
+                      <br>
+                      <div class="row" >
+                        <div class="col-md-4 text-center">
+                          <img src="./assets/img/logo.png" style= "width: 40%; height: 85%;" class="img-fluid" alt="RMA logo">
+                        </div>
+                        <div class="col-md-7">
+                          <h5 class="text-center " style="font-size:25px">༄༅ །། རྒྱལ་གཞུང་དངུལ་ལས་དབང་འཛིན།།</h5>
+                          <h5 class="text-center " style="font-size:13px">ROYAL MONETARY AUTHORITY OF BHUTAN</h5>
+                          <h5 class="text-center " style="font-size:13px" >Central Registry for Secured Transaction</h5>
+                          <h5 class="text-center " style="font-size:13px">Money Receipt</h5>
+                        </div>
+                      </div>
+                      <!-- Receipt main section -->
+                      <div class="row">
+                        <div class="col-md-4 text-center">
+                          <p class="formats">Receipt Date : {{dto.receiptDate | date: 'dd/MM/yyyy'}}</p>
+                          <p class="formats">Received From : {{dto.from}}</p>
+                        </div>
+                        <div class="col-md-6 text-right" style="margin-right: 5px;" >
+                          <p class="formats">Receipt Number : {{dto.receiptNumber}}</p>
+                        </div>
+                      </div>
+                      <!-- Receipt table section -->
+                      <div class="row" style="margin-left: 30x;margin-right: 30px;margin-left: 30px;" >
+                        <div class="col-md-12 text-center" >
+                          <p class="formats">A sum of BTN {{dto.sumAmount}} by cash is received from {{dto.from}}, by Central Registry to the following accounts.</p>
+                          <table class="table table-bordered">
+                            <thead>
+                              <tr style="line-height: 0px; height: 0px;">
+                                <th class="formats">Sl.No</th>
+                                <th class="formats">System Report Number</th>
+                                <th class="formats">Ownership Type</th>
+                                <th class="formats">Particulars of head of Accounts</th>
+                                <th class="formats">Amount (Nu)</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let r of reportList; let i =index;" style="line-height: 0px; height: 0px;">
+                                <td class="formats" >{{i+1}}</td>
+                                <td class="formats">{{r.reportNumber}}</td>
+                                <td class="formats" >{{r.debtorType}}</td>
+                                <td class="formats" >Certified Search Report</td>
+                                <td class="formats" >{{r.receivedAmt}} </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                
+                          <hr>
+
+                        </div>
+                      </div>
+                      <!-- receipt footer -->
+                      <div class="row">
+                        <div class="col-md-11 text-center">
+                          <p class="text-right formats">Total: BTN: {{dto.sumAmount}}</p>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4 text-center">
+                          <p class="formats">Received by: {{dto.username}}</p>
+                        </div>
+                      </div>
+                      <br>
+                      <div class="row">
+                        <div class="col-md-10 text-right formats">
+                          (Signature)
+                        </div>
+                      </div>
+                      <br>
+        
+                      <!-- CERTIFICATE MAIN SECTION -->
+                      <!-- <div class="row">
+                        <div class="col-md-12">
+                          <h5 class="text-right"><b>Date: </b></h5>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <br><br>
+                              <h1 class="text-center" style="color: #bf8f00">ROYAL GOVERNMENT OF BHUTAN</h1>
+                              <h1 class="text-center" style="color: #bf8f00">TREASURY BILL CERTIFICATE</h1>
+                              <br><br>
+                              <h3 class="text-center">THIS IS TO CERTIFY THAT</h3>
+                              <br><br>
+                              <h2 class="text-center" style="color: #2f5496" *ngIf="selectedUser.userType===4">{{selectedUser.orgName}}</h2>
+                              <h2 class="text-center" style="color: #2f5496" *ngIf="selectedUser.userType!=4">{{selectedUser.username}}</h2>
+                              <br><br>
+                              <h4 class="text-center">is a holder of the RGoB <span><b>{{selectedBill.duration}} Days</b></span>  Treasury Bill Series
+                                <span><b>{{selectedBill.billsNumber}}</b></span>
+                                issued on
+                                <br><br><span><b>{{selectedBill.auctionDate | date: 'MMMM dd, yyyy'}}</b></span> worth
+                                <span><b>Nu. {{totalAllotted | number: '.2'}}</b> <br><br> (Ngultrum {{totalAllottedInWords}} Only)</span>
+                                <br><br> maturing on
+                                <span><b>{{selectedBill.maturationDate | date: 'MMMM dd, yyyy'}}</b>.</span>
+                              </h4><br><br><br>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+        
+                      <!-- SIGNATORIES -->
+                      <!-- <div class="row" *ngIf="totalAllotted">
+                        <div class="col-md-6 text-center">
+                          <img src="./assets/img/dpa-sign.png" style="width: 320px; height: 200px;" alt="...">
+                          <hr>
+                          <h5>Tshering Dorji</h5>
+                          <h5>Director</h5>
+                          <h5>Department of Public Accounts</h5>
+                          <h5>Ministry of Finance</h5>
+                        </div>
+                        <div class="col-md-6 text-center">
+                          <img src="./assets/img/db_seal_and_sign.jpg" style="width: 300px; height: 200px;" alt="...">
+                          <hr style="color: blue;">
+                          <h5>Tshering Dema</h5>
+                          <h5>Executive Director</h5>
+                          <h5>Department of Banking</h5>
+                          <h5>Royal Monetary Authority of Bhutan</h5>
+                        </div>
+                      </div> -->
+        
+                      <!-- <div class="row"  *ngIf="!totalAllotted">
+                        <div class="col-md-12">
+                          <h1 class="text-center text-warning">NO VALID CERTIFICATE AVAILABLE!</h1>
+                        </div>
+                      </div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- /.row -->
+            </div><!-- /.container-fluid -->
+          </section>
+          <modal #modalStdDtls>
+            <modal-header >
+                <h6 class="text-center"></h6>
+            </modal-header>
+              <modal-content>
+                <div class="row table-responsive">
+                  <div class="card">
+                    <h5 class="card-header bg-primary">Course Taken</h5>
+                    <div class="card-body">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Course Name</th>
+                            <th scope="col">Course ID</th>
+                            <th scope="col">Course Level</th>
+                            <th scope="col">Training Date</th>
+                            <th scope="col">Course Status</th>
+                            <th scope="col">Training Location</th>
+                            <th scope="col">Trainer</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let ct of coursesTakenList; let i= index;">
+                            <td>{{i+1}}</td>
+                            <td>{{ct.courseMaster.courseName}}</td>
+                            <td>{{ct.courseMaster.courseId}}</td>
+                            <td>{{ct.courseMaster.courseLevelMaster.courseLvlName}}</td>
+                            <td>{{ct.startDate}} - {{ct.endDate}}</td>
+                            <td>{{ct.courseStatus}}</td>
+                            <td>{{ct.dspCentre.dspCentre}}</td>
+                            <td>{{ct.trainers.trainerName}}</td>
+                            
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                
+              <div class="row table-responsive">
+                <div class="card">
+                  <h5 class="card-header bg-primary">Recommended course</h5>
+                  <div class="card-body">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <!-- <th scope="col">#</th> -->
+                          <th scope="col">Course Name</th>
+                          <th scope="col">Course ID</th>
+                          <th scope="col">Course Level</th>
+                        </tr>
+                      </thead>
+                      <tbody >
+                        <ng-container *ngFor="let rc of recommendedCourse;  ">
+                          <tr   *ngFor="let data of rc; let i= index">
+                          <!-- <div *ngFor="let data of rc; let i= index"> -->
+                              <!-- <td *ngIf="!courseIDTaken.includes(data.courseId)">{{i+1}}</td> -->
+                              <td *ngIf="!courseIDTaken.includes(data.courseId)">{{data.courseName}}</td>
+                              <td *ngIf="!courseIDTaken.includes(data.courseId)">{{data.courseId}}</td>
+                              <td *ngIf="!courseIDTaken.includes(data.courseId)">{{data.courseLevelMaster.courseLvlName}}</td>
+                            <!-- </div> -->
+                            </tr>
+                            <!-- {{rc}} -->
+                          </ng-container>
+                      
+                      </tbody>
+                    </table>
+                    
+                  </div>
+                </div>
+              </div>
+              </modal-content>
+            <modal-footer>
+                <!-- <button class="btn btn-primary" (click)="onCloseHandled()">close</button> -->
+            </modal-footer>
+        </modal>
+          <!-- student dashboard end -->
+        <router-outlet></router-outlet>
+    </div>
+    <!-- /.content-wrapper -->
+
+    
+   
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <app-footer></app-footer>
+</div>
+<!-- ./wrapper -->

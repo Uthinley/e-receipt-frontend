@@ -1,0 +1,577 @@
+<div class="wrapper">
+
+    <!-- Header menu -->
+    <app-header></app-header>
+  
+    <!-- sidebar menu -->
+    <app-sidebar></app-sidebar>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Breadcrumb start -->
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3>Training Programme</h3>
+                </div>
+                <div class="col-sm-6 d-none d-sm-block">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a routerLink="/home">DSP</a></li>
+                    <li class="breadcrumb-item active">Training Programme</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section> 
+          <!-- Breadcrumb ends -->
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card dessung">
+                  <div class="card-header text-white bg-secondary" >
+                    <h3 class="card-title">Add Training Programme</h3>
+                  </div>
+                  <!-- /.card-header -->
+                  <!-- form start -->
+                  <form [formGroup]="courseForm" (ngSubmit)="saveCourse()">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="cid">Course ID</label>
+                            <ng-select formControlName="courseId" [(ngModel)]="selectedCourseId" (ngModelChange)= "getCourseDetail($event)">
+                              <ng-option *ngFor="let clist of courseMasterList" [value]="clist.id">{{clist.courseId}} - {{clist.courseName}}</ng-option>
+                            </ng-select>
+                            <!-- <select formControlName="courseId" #myselect (change)="getCourseDetail(myselect.value)">
+                              <option *ngFor="let clist of courseMasterList" [value]="clist.id">{{clist.courseId}}</option>
+                            </select> -->
+                              <!-- <input type="text" formControlName="courseId" class="form-control" placeholder="Enter course ID"> -->
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                              <label>Batch Number</label>
+                              <input type="text" #startDate class="form-control" formControlName="batchNo">
+                            </div>
+                      </div>
+
+                      </div>
+                        
+                        <input type="number" formControlName="id" hidden/>
+                        <div class="alert alert-info alert-dismissible" *ngIf="!isHidden">
+                          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                          <h5><i class="icon fas fa-info"></i> Course Detail!</h5>
+                            <h6><span class="text-warning">Course Name :</span>  {{courseDetail.courseName}}</h6>
+                            <h6><span class="text-warning">Course Level :</span> {{courseDetail.courseLevelMaster.courseLvlName}}</h6>
+                            <h6><span class="text-warning">Sector  :</span> {{courseDetail.department.departmentName}}</h6>
+                            <!-- <h6><span class="text-warning">Branch :</span> {{courseDetail.branch.branchName}}</h6> -->
+                          </div>
+                      <!-- <div class="row">
+                        <div class="col-sm-12">
+                          <label for="did">Department</label>
+                          <select class="form-control" formControlName="industrailSector">
+                            <option value="0">----Select----</option>
+                            <option *ngFor="let dept of departmentList" value="{{dept.departmentName}}">{{dept.departmentName}}</option>
+                          </select>
+                        </div>
+                      </div> -->
+                      <div class="row">
+                          <!-- <div class="col-sm-6">
+                              <div class="form-group">
+                                  <label for="dob">Course Level</label>
+                                  <select class="form-control" formControlName="courseLevel">
+                                    <option>----Select level----</option>
+                                    <option value="Basic">Basic</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Advanced">Advanced</option>
+                                  </select>
+                                </div>
+                          </div> -->
+                          <div class="col-sm-6">
+                              <div class="form-group">
+                                  <label for="mobileNumber">Start Date</label>
+                                  <input type="date" #startDate class="form-control" formControlName="startDate">
+                                </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                              <label for="emailAddress">End Date</label>
+                              <input type="Date" #endDate class="form-control" formControlName="endDate" (change)="calDuration(endDate.value, startDate.value)">
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-sm-6">
+                              <div class="form-group">
+                                <label for="emailAddress">Course Duration (days)</label>
+                                <input type="number" class="form-control" value="{{courseDuration}}" formControlName="course_duration" readonly>
+                                </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="cid">Course status</label>
+                                <select class="form-control" formControlName="courseStatus">
+                                  <option>----Select status----</option>
+                                  <option value="Completed">Completed</option>
+                                  <option value="On-going">On-going</option>
+                                  <option value="Future">Future</option>
+                                </select>
+                              </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-sm-6">
+                              <div class="form-group">
+                                  <label >Cohort size</label>
+                                  <input class="form-control" type="number" formControlName="cohortSize">
+                                </div>
+                          </div>
+                          
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Training Location</label>
+                                <select class="form-control" formControlName="trainingLocationId">
+                                  <option value="0">----Select----</option>
+                                  <option *ngFor="let dsp of dspCentreList" value="{{dsp.id}}">{{dsp.dspCentre}}</option>
+                              </select>
+                              </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Trainer</label>
+                                <ng-select formControlName="trainerId" multiple="multiple" data-dropdown-css-class="select2-purple" class="select2 select2-purple">
+                                  <ng-option *ngFor="let tlist of trainerList" [value]="tlist.id">{{tlist.trainerName}} - {{tlist.trainerId}}</ng-option>
+                                </ng-select>
+                                <!-- <select class="form-control" formControlName="trainerId">
+                                  <option value="0">----Select----</option>
+                                  <option *ngFor="let tlist of trainerList" value="{{tlist.id}}">{{tlist.trainerName}}</option>
+                              </select> -->
+                              </div>
+                        </div>
+                    </div>
+                    </div>
+                    <!-- /.card-body -->
+    
+                    <div class="card-footer">
+                      <button type="submit" class="btn btn-primary mr-3">Add</button>
+                      <!-- <span *ngIf="isUpdate">
+                        <button type="submit" class="btn btn-success mr-3">Update</button>
+                      </span> -->
+                    </div>
+                  </form>
+                </div>                 
+              </div>  
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card">
+                    <div class="card-header bg-secondary">
+                      <h3 class="card-title">Training Programme</h3>
+      
+                      <!-- <div class="card-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                          <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+      
+                          <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">
+                              <i class="fas fa-search"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div> -->
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive table-bordered mt-4">
+                      <!-- <div class="alert alert-info alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                        Please use Program ID as a primary key (Reference Number) to locate the different programme held at different DSP location.
+                        </div> -->
+                      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-hover text-nowrap">
+                        <thead>
+                          <tr>
+                            <th></th>
+                            <!-- <th>Program ID </th> -->
+                            <th>Course name</th>
+                            <th>Course ID</th>
+                            <th>Batch</th>
+                            <th>Course level</th>
+                            <th>Start date</th>
+                            <th>End Date</th>
+                            <th>Course status</th>
+                            <th>Training location</th>
+                            <th>Dzongkhag</th>
+                            <th>Trainer</th>
+                            <th>Trainer ID</th>
+                            <th></th>
+
+                            <!-- <th>Industrial sector</th>
+                            <th>Course level</th>
+                            <th>Duration</th>
+                            <th>Start date</th>
+                            <th>End Date</th>
+                            <th>Cohort size</th>
+                            <th>No. of students certified</th>
+                            <th>Batch number</th>
+                            <th>Training location</th>
+                            <th>Trainer</th> -->
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor = "let clist of courseList ; let i =index" >
+                            <td>
+                              <a class="btn btn-app" (click)="openModalAddStd(clist)">
+                                <i class="fa fa-plus-circle"></i> Add std
+                                </a>
+                                <a class="btn btn-app" (click)="openModalStd(clist.id)">
+                                  <!-- <span class="badge bg-purple">891</span> -->
+                                  <i class="fas fa-users"></i> View std
+                                </a>
+                             </td>
+                            <!-- <td>{{i+1}}</td> -->
+                            <!-- <td>{{clist.id}}</td> -->
+                            <td>{{clist.courseMaster.courseName}}</td>
+                            <td>{{clist.courseMaster.courseId}}</td>
+                            <td>Batch</td>
+                            <td>{{clist.courseMaster.courseLevelMaster.courseLvlName}}</td>
+                            <td>{{clist.startDate}}</td>
+                            <td>{{clist.endDate}}</td>
+                            <td>{{clist.courseStatus}}</td>
+                            <td>{{clist.dspCentre.dspCentre}}</td>
+                            <td>{{clist.dspCentre.dzongkhag.dzongkhag}}</td>
+                            <td><p *ngFor="let t of clist.trainers">{{t.trainerName}} - {{t.trainerId}}</p></td>
+                            <td></td>
+                            <td>
+                              <!-- <a class="btn btn-sm " (click)="openModal(clist)">
+                                <i class="fa fa-plus"></i>
+                              </a> -->
+                              <a class="btn btn-success text-white"  (click)="editByRow(clist)"><i class="fas fa-edit"></i> </a>
+                              <!-- <a class="btn btn-sm" (click)="editByRow(clist)"><i class="far fa-edit mr-1"></i></a> -->
+                              <a class="btn btn-danger text-white ml-2" (click)="openModalDelete(clist)"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                            <!-- <td>
+                              <span  class="badge badge-success" *ngIf="clist.courseStatus == 'On-going'; else elseBlock">{{clist.courseStatus}}</span>
+                              <ng-template #elseBlock><span #elseBlock>{{clist.courseStatus}}</span></ng-template>
+                              
+                            </td> -->
+                            <!-- <td>{{clist.industrailSector}}</td>
+                            <td>{{clist.courseLevel}}</td>
+                            <td>{{clist.course_duration}}</td>
+                            <td>{{clist.startDate}}</td>
+                            <td>{{clist.endDate}}</td>
+                            <td>{{clist.noOfApplicants}}</td>
+                            <td>{{clist.noOfStdCertified}}</td>
+                            <td>{{clist.batchNo}}</td>
+                            <td>{{clist.trainingLocation}}</td>
+                            <td>{{clist.trainers.trainerName}}</td> -->
+                           
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                
+                  </div>
+            </div>
+          </div>
+        <router-outlet></router-outlet>
+    </div>
+    <!-- /.content-wrapper -->
+
+    <modal #myModal>
+        <modal-header >
+            <h6 class="text-center">Course Detail</h6>
+        </modal-header>
+          <modal-content>
+              <div class="row">
+                <div class="col-md-12 text-center">
+                  <i class="fa fa-user-circle fa-5x" aria-hidden="true"></i>
+                  <p>Trainer Name : <span class="text-bold">{{trainers}}</span></p>
+                </div>
+              </div>
+              <div class="row text-center">
+                <div class="col-md-6">
+                  <p>1. Course Name : <span class="text-primary">{{courseName}}</span></p>
+                </div>
+                <div class="col-md-6">
+                  <p>2. Course ID : <span class="text-primary">{{courseId}}</span></p>
+                </div>
+              </div>
+              <div class="row text-center">
+                <div class="col-md-6">
+                  <p>3. Course Level : <span class="text-primary">{{courseLevel}}</span></p>
+                </div>
+                <div class="col-md-6">
+                  <p>4. Course Status : <span class="text-primary">{{courseStatus}}</span></p>
+                </div>
+              </div>
+              <div class="row text-center">
+                <div class="col-md-6">
+                  <p>5. Start Date : <span class="text-primary">{{startDates | date: 'dd-MM-yyyy' }}</span></p>
+                </div>
+                <div class="col-md-6">
+                  <p>6. End Date : <span class="text-primary">{{endDates | date: 'dd-MM-yyyy'}}</span></p>
+                </div>
+              </div>
+              <div class="row text-center">
+                <div class="col-md-6">
+                  <p>7. Training Location : <span class="text-primary">{{trainingLocation}}</span></p>
+                </div>
+                <div class="col-md-6">
+                  <p>8. Batch No : <span  class="text-primary">{{batchNo}}</span></p>
+                </div>
+              </div>
+              <div class="row text-center">
+                <div class="col-md-6">
+                  <p>9. Cohort Size : <span class="text-primary">{{noOfApplicants}}</span></p>
+                </div>
+                <div class="col-md-6">
+                  <p>10. Number of student certified : <span  class="text-primary">{{noOfStdCertified}}</span></p>
+                </div>
+              </div>
+             
+          </modal-content>
+        <modal-footer>
+            <button class="btn btn-primary" (click)="onCloseHandled()">close</button>
+        </modal-footer>
+    </modal>
+
+    <modal #myModalDelete>
+      <modal-header >
+          <h6 class="text-center"></h6>
+      </modal-header>
+        <modal-content>
+          <p>Are you sure to delete this course?</p>
+        </modal-content>
+      <modal-footer>
+          <button class="btn btn-primary mr-3" (click)="onCloseDelete()">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="onDeleteCourse()">Yes</button>
+      </modal-footer>
+  </modal>
+
+  <modal #modalAddStd>
+    <modal-header >
+        <h6 class="text-center">Add student</h6>
+    </modal-header>
+      <modal-content>
+        <div class= "row">
+          <p> 
+            Course Name : <span class="text-primary">{{courseName}}</span> |
+            Course ID : <span class="text-primary">{{courseId}}</span> |
+            Course Level : <span class="text-primary">{{courseLevel}}</span> |
+            Training Location : <span class="text-primary">{{trainingLocation}}</span> |
+            Trainer : <span class="text-primary">{{trainers}}</span> |
+            <!-- Start Date : <span class="text-primary">{{trainers}}</span> |
+            End Date : <span class="text-primary">{{trainers}}</span> | -->
+          </p>
+        </div>
+        <!-- accordion -->
+        <div class="row">
+            <a class="btn" (click)="toggleShowAddStd()"> <i class="fas fa-plus"></i> <u>  Add Student</u></a>
+        </div>
+        <hr>
+        
+        <div class="row mt-4" *ngIf="isShown">
+          <form [formGroup]="addStudentForm">
+            <input type="text" [(ngModel)]="courseSelected" formControlName="courseSelected" hidden>
+            <table class="table table-sm table-bordered ">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">CID</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Gender</th>
+                  <th scope="col">Dessung ID</th>
+                  <th scope="col">Mobile no</th>
+                  <th scope="col">
+                    <span>
+                        <i class="fa fa-plus-circle" (click)="onAddRow()"  aria-hidden="true"></i>
+                    </span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody formArrayName="studentList">
+                  <tr *ngFor="let row of addStudentForm.get('studentList')['controls'];let i = index;" [formGroupName]="i">
+                    <td>{{i+1}}</td>
+                    <td>
+                      <input type="number" class="form-control" formControlName="cid" [(ngModel)]="row.cid" (change)="onKeyDessungDetail($event,row,i)" >
+                      <!-- <div *ngIf="studentSubmitted && studentGetter.cid.errors" class="invalid-feedback">
+                        <div *ngIf="ciderror">length</div> -->
+                        <!-- <div *ngIf="studentGetter.cid.errors.minLength">Password must be 11 characters</div> -->
+                    <!-- </div> -->
+                    
+                    </td>
+                    <td>
+                      <!-- [(ngModel)]="row.name" [(ngModel)]="name" value="{{row.name}}" -->
+                      <input type="text" class="form-control" formControlName="name" [(ngModel)]="row.name" value="{{row.name}}" readonly>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control" formControlName="gender" [(ngModel)]="row.gender" value="{{row.gender}}"  readonly>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control" formControlName="did" [(ngModel)]="row.did" value="{{row.did}}" readonly>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control" formControlName="mobileNo" [(ngModel)]="row.mobileNo"  value="{{row.mobileNo}}"  readonly>
+                    </td>
+                    <td>
+                      <!-- <button (click)="onRemoveRow(i)">Remove</button> -->
+                      <i  (click)="onRemoveRow(i)" class="fa fa-trash"></i>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control" formControlName="avatar" [(ngModel)]="row.avatar"  value="{{row.avatar}}"  hidden>
+                      <input type="text" class="form-control" formControlName="batchNo" [(ngModel)]="row.batchNo"  value="{{row.batchNo}}"  hidden>
+                      <input type="text" class="form-control" formControlName="bloodGroup" [(ngModel)]="row.bloodGroup"  value="{{row.bloodGroup}}"  hidden>
+                      <input type="text" class="form-control" formControlName="dob" [(ngModel)]="row.dob"  value="{{row.dob}}"  hidden>
+                      <input type="text" class="form-control" formControlName="email" [(ngModel)]="row.email"  value="{{row.email}}"  hidden>
+                      <input type="text" class="form-control" formControlName="maritalStatus" [(ngModel)]="row.maritalStatus"  value="{{row.maritalStatus}}"  hidden>
+                      <input type="text" class="form-control" formControlName="trainingCentreId" [(ngModel)]="row.trainingCentreId"  value="{{row.trainingCentreId}}"  hidden>
+                      <input type="text" class="form-control" formControlName="trainingYear" [(ngModel)]="row.trainingYear"  value="{{row.trainingYear}}"  hidden>
+
+                    </td>
+                  </tr>
+              </tbody>
+            </table>
+            <button class="btn btn-primary" (click)="saveStudent()">Add student</button>
+            <hr>
+            <!-- for excel/csv upload for new students -->
+          </form>
+        </div>
+        
+        <div class="row">
+          <a class="btn" (click)="toggleUploadStd()"> <i class="fas fa-upload"></i> <u>  Upload Student</u></a>
+        </div>
+        <div class="row" *ngIf="isShownUpload">
+          <div class="card">
+            <div class="card-body">
+              <form [formGroup] = "studentUploadForm" (ngSubmit)="uploadStudentFile()">
+              <!-- <label> File</label> -->
+                <input type="file" formControlName="file" class="h-full w-full opacity-0" name="" (change)="onFileChange($event)" multiple="false">
+                <button type="submit" class="btn btn-primary" >Upload</button>
+              </form>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-bordered" *ngIf="isPreview">
+              <tbody>
+                  <tr *ngFor="let row of data">
+                    <td *ngFor="let val of row">
+                      {{val}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>      
+      </modal-content>
+    <modal-footer>
+        <button class="btn btn-primary" (click)="onCloseAdd()">close</button>
+    </modal-footer>
+</modal>
+
+<!-- modal for displaying std -->
+<modal #modalViewStd>
+  <modal-header >
+      <h6 class="text-center"> Student list</h6>
+  </modal-header>
+    <modal-content>
+      <div class="table-responsive">
+      <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger1" class="table table-bordered table-hover  ">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>CID</th>
+            <th>DID</th>
+            <th>DOB</th>
+            <th>Mobile No</th>
+            <th>Gender</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let std of student ; let i =index" >
+          <td>{{i+1}}</td>
+          <!-- <td>{{clist.id}}</td> -->
+          <td>
+                <div *ngIf="!std.isEdit">
+                  {{std.name}}
+                </div>
+                <div *ngIf="std.isEdit">
+                    <input type="text" class="form-control" [(ngModel)]="std.name"/>
+                </div>
+          </td>
+          <td>
+                <div *ngIf="!std.isEdit">
+                  {{std.cid}}
+                </div>
+                <div *ngIf="std.isEdit">
+                    <input type="number" class="form-control" [(ngModel)]="std.cid"/>
+                </div>
+          </td>
+          <td>
+                <div *ngIf="!std.isEdit">
+                  {{std.dessungId}}
+                </div>
+                <div *ngIf="std.isEdit">
+                    <input type="text" class="form-control" [(ngModel)]="std.dessungId"/>
+                </div>
+          </td>
+          <td>
+                <div *ngIf="!std.isEdit">
+                  {{std.dob}}
+                </div>
+                <div *ngIf="std.isEdit">
+                    <input type="text" class="form-control" [(ngModel)]="std.dob"/>
+                </div>
+          </td>
+          <td>
+                <div *ngIf="!std.isEdit">
+                  {{std.mobileNo}}
+                </div>
+                <div *ngIf="std.isEdit">
+                    <input type="text" class="form-control" [(ngModel)]="std.mobileNo"/>
+                </div>
+          </td>
+          <td>
+              <div *ngIf="!std.isEdit">
+                {{std.sex}}
+              </div>
+              <div *ngIf="std.isEdit">
+                  <input type="text" class="form-control" [(ngModel)]="std.sex"/>
+              </div>
+          </td>
+          <td>
+            <div *ngIf="!std.isEdit">
+              <a class="btn btn-sm" (click)="getStudentById(std)" ><i class="far fa-edit mr-1"></i></a>
+              <a class="btn btn-sm " (click)="deleteStd(std)"><i class="fas fa-trash-alt"></i></a>
+            </div>
+            <div *ngIf="std.isEdit">
+              <a class="btn btn-sm" (click)="updateStudentById(std)" ><i class="fas fa-check"></i></a>
+              <a class="btn btn-sm " (click)="closeEdit(std)"><i class="fas fa-times"></i></a>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" (click)="onCloseStd()">close</button>
+  </modal-footer>
+</modal>
+    
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  
+    <!-- Main Footer -->
+    <app-footer></app-footer>
+  
+  </div>
+  

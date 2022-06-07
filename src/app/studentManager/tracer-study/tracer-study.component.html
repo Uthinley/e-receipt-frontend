@@ -1,0 +1,372 @@
+<div class="wrapper">
+
+    <!-- Header menu -->
+    <app-header></app-header>
+  
+    <!-- sidebar menu -->
+    <app-sidebar></app-sidebar>
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Breadcrumb start -->
+        <section class="content-header">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3>Student Manager (Tracer Study)</h3>
+                </div>
+                <div class="col-sm-6 d-none d-sm-block">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a routerLink="/home">DSP</a></li>
+                    <li class="breadcrumb-item active">Tracer Study</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </section> 
+          <!-- Breadcrumb ends -->
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-6">
+                <form [formGroup]="searchForm" (ngSubmit)="searchDessunp()">
+                    <div class="input-group">
+                        <input type="number" formControlName="cid" [ngClass]="{ 'is-invalid': submitted && getter.cid.errors }"  class="form-control form-control-lg" placeholder="search student detail by cid" required>
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-lg btn-primary" >
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="submitted && getter.cid.errors" class="invalid-feedback">
+                            <div *ngIf="getter.cid.errors.required">Cid is required</div>
+                            <div *ngIf="getter.cid.errors.minLength">Password must be 11 characters</div>
+                        </div>
+                        <!-- <div *ngIf="searchForm.controls[cid].errors.re">Cid is required</div> -->
+                    </div>
+                </form>
+                </div>
+              </div>
+
+              <div *ngIf="!isValidCID && errorCidMessage!== ''">
+                <section class="content">
+                    <div class="error-page">
+                      <h2 class="headline text-warning"></h2>
+              
+                      <div class="error-content">
+                        <h3><i class="fas fa-exclamation-triangle text-warning"></i> Oops! Details not found.</h3>
+                        <p>
+                          We could not find the details you were looking for.
+                          Meanwhile, you may try using the valid CID.
+                        </p>
+                      </div>
+                      <!-- /.error-content -->
+                    </div>
+                    <!-- /.error-page -->
+                  </section>
+                <!-- <div class="alert alert-danger" role="alert">
+                    {{errorCidMessage}}
+                  </div> -->
+              </div>
+              <div *ngIf="isValidCID" class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body box-profile">
+                          <div class="text-center">
+                            <span *ngIf="!student.avatar; else elseBlock">
+                                <img class="profile-user-img img-fluid img-circle" src="https://cdn0.iconfinder.com/data/icons/male-national-character-2/128/bhutan-bhutanese-national-costume-man-512.png" alt="N/A">
+                            </span>
+                            <ng-template #elseBlock> <img class="profile-user-img img-fluid img-circle" src="{{student.avatar}}" alt="profile picture not found"></ng-template>
+                          </div>
+                          
+                          <h3 class="profile-username text-center">{{student.name}}</h3>
+          
+                          <p class="text-muted text-center">{{student.dessungId}}</p>
+          
+                          <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                              <b>CID</b> <a class="float-right">{{student.cid}}</a>
+                            </li>
+                            <li class="list-group-item">
+                              <b>DOB</b> <a class="float-right">{{student.dob}}</a>
+                            </li>
+                            <li class="list-group-item">
+                              <b>Blood group</b> <a class="float-right">{{student.bloodGroup}}</a>
+                            </li>
+                            <li class="list-group-item">
+                                <b>Gender</b> <a class="float-right">{{student.sex}}</a>
+                              </li>
+                              <li class="list-group-item">
+                                <b>Marital Status</b> <a class="float-right">{{student.maritalStatus}}</a>
+                              </li>
+                              <li class="list-group-item">
+                                <b>Batch Number</b> <a class="float-right">{{student.batchNo}}</a>
+                              </li>
+                              <li class="list-group-item">
+                                <b>Training Year </b> <a class="float-right">{{student.trainingYear}}</a>
+                              </li>
+                              <li class="list-group-item">
+                                <b>Mobile Number </b> <a class="float-right">{{student.mobileNo}}</a>
+                              </li>
+                          </ul>
+          
+                          <!-- <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a> -->
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+
+                </div>
+                <div class="col-md-8">
+                  <div class="card card-primary card-outline dessung">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                          <li class="nav-item"><a class="nav-link active" href="#background" data-toggle="tab">Tracer background</a></li>
+                          <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Tracer History</a></li>
+                          <li class="nav-item"><a class="nav-link " href="#settings" data-toggle="tab">Tracer Study</a></li>
+                        </ul>
+                      </div>
+                      <div class="card-body">
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="background">
+                            <div class="callout callout-danger">
+                              <h5>Objective</h5>
+                              <p>To find out what De-suups are doing after the completion of the De-suung Skilling Programme
+                                 and facilitate their post-DSP engagement</p>
+                              </div>
+                              <div class="callout callout-info">
+                                <h5>Mode</h5>
+                                <ol>
+                                  <li>
+                                    De-suups will be contacted by the third month of the completion of their DSP.
+                                  </li>
+                                  <li>
+                                    However, to close the gap, as a one-off exercise, all De-suups who have completed the DSPs will be contacted. Thereafter, the timeline can be within three months of completion.
+                                  </li>
+                                  <li>
+                                    The tracer survey can be conducted online through the De-suung App and only those De-suups who do not respond to the online survey will be contacted via telephone by trained enumerators.
+                                  </li>
+                                </ol>
+                                </div>
+                          </div>
+                      <!-- /.tab-pane -->
+                        <div class="tab-pane" id="timeline">
+                          <div *ngIf="tracerList.length == 0" class="alert alert-info alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
+                              No tracer history found.
+                            </div>
+                            <!-- The timeline -->
+                            <div *ngFor="let tlist of tracerList;">
+                              <div class="post">
+                                <div class="user-block">
+                                  <!-- <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image"> -->
+                                  <span class="username">
+                                    <a href="#">{{tlist.createdDate | date: 'dd-MM-yyyy'}}</a>
+                                    <!-- <a href="#" class="float-right btn-tool"><i class="fas fa-times"></i></a> -->
+                                  </span>
+                                  <!-- <span class="description">Shared publicly - 7:30 PM today</span> -->
+                                </div>
+                                <!-- /.user-block -->
+                                <p>
+                                  <p>Employment Status : {{tlist.employmentStatus}}</p>
+                                            <p>Organization Type : {{tlist.organizationType}}</p>
+                                            <p>Organization Name : {{tlist.organizationName}}</p>
+                                            <p>Place of Work : {{tlist.placeOfWork}}</p>
+                                            <p>How long have you been working? : {{tlist.workDuration}}</p>
+                                            <p>How long do you continue to work? : {{tlist.remainingWorkDuration}}</p>
+                                            <p>Job satisfaction : {{tlist.jobSatisfaction}}</p>
+                                            <p>Do you plan to go for another training? : {{tlist.futureDspPlan}}</p>
+                                            <p>Is the DSP training related to your current work? : {{tlist.dspCurrentWorkRelation}}</p>
+                                            <p>Current Salary : {{tlist.salary}}</p>
+                                <p>
+                                  <!-- <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
+                                  <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a> -->
+                                
+                                </p>
+          
+                              </div>
+                              <hr>
+                            </div>
+                            
+                        </div>
+                            <!-- <div class="card-header text-white bg-secondary" >
+                            <h3 class="card-title">Add Student</h3>
+                            </div> -->
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <div class="tab-pane" id="settings">
+                            <form [formGroup]="tracerForm" (ngSubmit)="saveTracer()">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Employment Status</label>
+                                            <select class="form-control" formControlName="employmentStatus" [ngClass]="{ 'is-invalid': tracerSubmitted && getterTracer.employmentStatus.errors }" >
+                                            <option>----Select----</option>
+                                            <option value="FT">Full Time</option>
+                                            <option value="PT">Part Time</option>
+                                            <option value="Intern">Intern</option>
+                                            <option value="OJT">OJT</option>
+                                            </select>
+                                            <div *ngIf="tracerSubmitted && getterTracer.employmentStatus.errors" class="invalid-feedback">
+                                                <div *ngIf="getterTracer.employmentStatus.errors.required">Employment Status is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Employed Organization Type</label>
+                                            <select class="form-control" id="organizationType" formControlName="organizationType" [ngClass]="{ 'is-invalid': tracerSubmitted && getterTracer.organizationType.errors }" >
+                                            <option>----Select----</option>
+                                            <option value="Governemnt">Government</option>
+                                            <option value="Private">Private</option>
+                                            </select>
+                                            <div *ngIf="tracerSubmitted && getterTracer.organizationType.errors" class="invalid-feedback">
+                                                <div *ngIf="getterTracer.employmentStatus.errors.required">Organization Type is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="cid">Current Salary</label>
+                                            <input type="number" class="form-control" id="salary" formControlName="salary" [ngClass]="{ 'is-invalid': tracerSubmitted && getterTracer.salary.errors }" placeholder="Enter salary">
+                                            <div *ngIf="tracerSubmitted && getterTracer.salary.errors" class="invalid-feedback">
+                                                <div *ngIf="getterTracer.salary.errors.required">Salary is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="did">Organization Name</label>
+                                            <input type="text" class="form-control" formControlName="organizationName" placeholder="Enter Organization Name" [ngClass]="{ 'is-invalid': tracerSubmitted && getterTracer.organizationName.errors }">
+                                            <div *ngIf="tracerSubmitted && getterTracer.organizationName.errors" class="invalid-feedback">
+                                                <div *ngIf="getterTracer.organizationName.errors.required">Organization Name is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="dzongkhag">Place of Work</label>
+                                            <select class="form-control" id="dzongkhag" formControlName="placeOfWork" [ngClass]="{ 'is-invalid': tracerSubmitted && getterTracer.placeOfWork.errors }">
+                                                <option value="Bumthang">Bumthang</option>
+                                                <option value="Chukha">Chukha</option>
+                                                <option value="Dagana">Dagana</option>
+                                                <option value="Gasa">Gasa</option>
+                                                <option value="Haa">Haa</option>
+                                                <option value="Lhuntse">Lhuntse</option>
+                                                <option value="Mongar">Mongar</option>
+                                                <option value="Paro">Paro</option>
+                                                <option value="Pemagatshel">Pemagatshel</option>
+                                                <option value="Punakha">Punakha</option>
+                                                <option value="Samdrup Jongkhar">Samdrup Jongkhar</option>
+                                                <option value="Samtse">Samtse</option>
+                                                <option value="Sarpang">Sarpang</option>
+                                                <option value="Thimphu">Thimphu</option>
+                                                <option value="Trashigang">Trashigang</option>
+                                                <option value="Trashiyangste">Trashiyangste</option>
+                                                <option value="Trongsa">Trongsa</option>
+                                                <option value="Tsirang">Tsirang</option>
+                                                <option value="Wangdue Phodrang">Wangdue Phodrang</option>
+                                                <option value="Zhemgang">Zhemgang</option>
+                                            </select>
+                                            <div *ngIf="tracerSubmitted && getterTracer.placeOfWork.errors" class="invalid-feedback">
+                                                <div *ngIf="getterTracer.placeOfWork.errors.required">Dzongkhag is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <label for="did">How long have you been working?</label>
+                                                <input type="text" class="form-control" formControlName="workDuration"  [ngClass]="{ 'is-invalid': tracerSubmitted && getterTracer.workDuration.errors }">
+                                                <div *ngIf="tracerSubmitted && getterTracer.workDuration.errors" class="invalid-feedback">
+                                                    <div *ngIf="getterTracer.workDuration.errors.required">This field is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="mobileNumber">How long do you continue to work?</label>
+                                            <input type="text" class="form-control"  formControlName="remainingWorkDuration" [ngClass]="{ 'is-invalid': tracerSubmitted && getterTracer.remainingWorkDuration.errors }">
+                                            <div *ngIf="tracerSubmitted && getterTracer.remainingWorkDuration.errors" class="invalid-feedback" >
+                                                <div *ngIf="getterTracer.remainingWorkDuration.errors.required">This field is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <label for="did">Job satisfaction</label>
+                                                <input type="text" class="form-control" formControlName="jobSatisfaction" [ngClass]="{ 'is-invalid': tracerSubmitted && getterTracer.jobSatisfaction.errors }">
+                                                <div *ngIf="tracerSubmitted && getterTracer.jobSatisfaction.errors" class="invalid-feedback" >
+                                                    <div *ngIf="getterTracer.jobSatisfaction.errors.required">This field is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <label for="did">Do you plan to go for another training?</label>
+                                                <input type="text" class="form-control" formControlName="futureDspPlan"  [ngClass]="{ 'is-invalid': tracerSubmitted && getterTracer.futureDspPlan.errors }">
+                                                <div *ngIf="tracerSubmitted && getterTracer.futureDspPlan.errors" class="invalid-feedback" >
+                                                    <div *ngIf="getterTracer.futureDspPlan.errors.required">This field is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <label for="did">Is the DSP training related to your current work?</label>
+                                                <input type="text" class="form-control" formControlName="dspCurrentWorkRelation" [ngClass]="{ 'is-invalid': tracerSubmitted && getterTracer.dspCurrentWorkRelation.errors }">
+                                                <div *ngIf="tracerSubmitted && getterTracer.dspCurrentWorkRelation.errors" class="invalid-feedback" >
+                                                    <div *ngIf="getterTracer.dspCurrentWorkRelation.errors.required">This field is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <!-- /.card-body -->
+            
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                    
+                </div>
+            </div>
+          </div>
+        <router-outlet></router-outlet>
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  
+    <!-- Main Footer -->
+    <app-footer></app-footer>
+  
+  </div>
+  
